@@ -33,6 +33,15 @@ bool isUserRoot() {
     return geteuid() == 0;
 }
 
+User *newUser() {
+    User *user = malloc(sizeof(User));
+    if (!user) {
+        fprintf(stderr, "Memory allocation failed.");
+        exit(EXIT_FAILURE);
+    }
+    return user;
+}
+
 void populate(User *shellUser) {
     shellUser->username = strdup(getUsername());
     shellUser->machine = strdup(getMachine());
@@ -41,4 +50,24 @@ void populate(User *shellUser) {
         exit(EXIT_FAILURE);
     }
     shellUser->isRoot = isUserRoot();
+}
+
+char *getPrompt(User *shellUser, char *defPrompt, char *suPrompt) {
+    char *promptTerminator = shellUser->isRoot ? suPrompt : defPrompt;
+    char *separator = ":";
+    size_t space = snprintf(NULL, 0, "%s%s%s%s", shellUser->username, separator, shellUser->machine, promptTerminator) + 1;
+    if (space < 0) {
+        fprintf(stderr, "Could not determine prompt size.");
+        exit(EXIT_FAILURE);
+    }
+    char *prompt = malloc(space);
+    if (!prompt) {
+        fprintf(stderr, "Memory allocation failed.");
+        exit(EXIT_FAILURE);
+    }
+    if (sprintf(prompt, "%s%s%s%s", shellUser->username, separator, shellUser->machine, promptTerminator)  < 0) {
+        fprintf(stderr, "Could not construct prompt.");
+        exit(EXIT_FAILURE);
+    }
+    return prompt;
 }

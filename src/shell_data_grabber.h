@@ -10,6 +10,10 @@ typedef struct User
     bool isRoot;
 } User;
 
+User *newUser();
+
 void populate(User *shellUser);
+
+char *getPrompt(User *shellUser, char *defPrompt, char *suPrompt);
 
 #endif // SHELL_DATA_GRABBER_
