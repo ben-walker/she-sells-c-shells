@@ -7,11 +7,9 @@ typedef struct User
 {
     char *username;
     char *machine;
-    bool isSuper;
-    char prompt;
+    bool isRoot;
 } User;
 
-void initialize(User *shellUser);
-char *getShellPrompt(User *shellUser);
+void populate(User *shellUser);
 
 #endif // SHELL_DATA_GRABBER_
