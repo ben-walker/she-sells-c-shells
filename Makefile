@@ -1,14 +1,25 @@
-all: ish
-ish: ish.o lex.yy.o
-	gcc -o ish ish.o lex.yy.o -lfl  
-ish.o: ish.c
-	gcc -Wall -g -c ish.c
-lex.yy.o: lex.yy.c
-	gcc -Wall -g -c lex.yy.c
-lex.yy.c: lex.c
-	flex lex.c
+EXE = tusk
+
+SRC_DIR = src
+OBJ_DIR = build
+
+SRC = $(wildcard $(SRC_DIR)/*.c)
+OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+
+CPPFLAGS += -Iinclude
+CFLAGS += -Wall
+LDFLAGS += $()
+LDLIBS += $()
+
+.PHONY: all clean
+
+all: $(EXE)
+
+$(EXE): $(OBJ)
+	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
 clean:
-	rm -f *.o
-	rm -f lex.yy.c
-	rm -f ish
-	
+	$(RM) $(OBJ)
