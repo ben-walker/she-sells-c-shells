@@ -14,6 +14,6 @@ User *newUser();
 
 void populate(User *shellUser);
 
-char *getPrompt(User *shellUser, char *defPrompt, char *suPrompt);
+char *getPrompt(User *shellUser, const char *defPrompt, const char *suPrompt);
 
 #endif // SHELL_DATA_GRABBER_

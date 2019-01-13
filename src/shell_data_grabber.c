@@ -52,8 +52,8 @@ void populate(User *shellUser) {
     shellUser->isRoot = isUserRoot();
 }
 
-char *getPrompt(User *shellUser, char *defPrompt, char *suPrompt) {
-    char *promptTerminator = shellUser->isRoot ? suPrompt : defPrompt;
+char *getPrompt(User *shellUser, const char *defPrompt, const char *suPrompt) {
+    const char *promptTerminator = shellUser->isRoot ? suPrompt : defPrompt;
     char *separator = ":";
     size_t space = snprintf(NULL, 0, "%s%s%s%s", shellUser->username, separator, shellUser->machine, promptTerminator) + 1;
     if (space < 0) {
