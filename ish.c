@@ -2,12 +2,6 @@ const char *mypath[] = { "./",
 "/usr/bin/", "/bin/", NULL
 };
 
-while (...)
-{
-/* Wait for input */
-printf ("prompt> ");
-fgets (...);
-
 /* Parse input */
 while (( ... = strsep (...)) != NULL)
 {
