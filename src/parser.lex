@@ -18,7 +18,7 @@ args[0] = NULL;
 %}
 {WORD}|{SPECIAL} {
     if (argCount < numArgs - 1) {
-        args[argCount++] = (char *)strdup(yytext);
+        args[argCount++] = strdup(yytext);
         args[argCount] = NULL;
     }
 }
@@ -32,7 +32,6 @@ args[0] = NULL;
 %%
 
 char **getln() {
-    // return (char **)yylex();
 	yylex();
     return args;
 }
