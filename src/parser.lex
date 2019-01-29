@@ -7,10 +7,10 @@ WORD [a-zA-Z0-9\/\.-]+
 SPECIAL [()><|&;*]
 
 %%
-
+%{
 argCount = 0;
 args[0] = NULL;
-
+%}
 {WORD}|{SPECIAL} {
     if (argCount < numArgs - 1) {
         args[argCount++] = (char *)strdup(yytext);
