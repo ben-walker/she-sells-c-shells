@@ -5,9 +5,11 @@ OBJ_DIR = build
 
 SRC = $(wildcard $(SRC_DIR)/*.c)
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+
+LEX = $(SRC_DIR)/parser.lex
 LEX_C = $(SRC_DIR)/lex.yy.c
 LEX_O = $(OBJ_DIR)/lex.yy.o
-LEX = $(SRC_DIR)/parser.lex
+FLEX = flex --outfile=$(LEX_C)
 
 CPPFLAGS += -Iinclude
 CFLAGS += -Wall -pedantic -std=c99
@@ -20,12 +22,13 @@ all: $(EXE)
 
 $(EXE): $(OBJ) $(LEX_O)
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+	$(RM) $(LEX_C)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 $(LEX_C): $(LEX)
-	flex --outfile=$@ $<
+	$(FLEX) $<
 
 clean:
 	$(RM) $(OBJ) $(EXE) $(LEX_C)
