@@ -3,18 +3,25 @@
 #include <stdio.h>
 #include <string.h>
 
-void commandLoop();
+void format(char *line) {
+    line[strcspn(line, "\r\n")] = 0;
+}
 
-void boot() {
-    Prompt *prompt = newPrompt();
-    commandLoop(prompt);
+int getCommand(const char *prompt, char **line) {
+    size_t allocSize;
+    printf("%s ", prompt);
+    return getline(line, &allocSize, stdin);
 }
 
 void commandLoop(Prompt *prompt) {
     char *buff = NULL;
-    size_t allocSize = 0;
 
-    while (printf("%s ", prompt->comm) >= 0 && getline(&buff, &allocSize, stdin) != -1) {
-        buff[strcspn(buff, "\r\n")] = 0;
+    while (getCommand(prompt->comm, &buff) != -1) {
+        format(buff);
     }
+}
+
+void boot() {
+    Prompt *prompt = newPrompt();
+    commandLoop(prompt);
 }

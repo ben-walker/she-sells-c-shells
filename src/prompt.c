@@ -5,9 +5,9 @@
 #include <pwd.h>
 #include <string.h>
 
-const char *DEF_PROMPT = "$";
-const char *ROOT_PROMPT = "#";
-const char *SEPARATOR = ":";
+static const char *DEF_PROMPT = "$";
+static const char *ROOT_PROMPT = "#";
+static const char *SEPARATOR = ":";
 
 char *getUsername() {
     const struct passwd *pws = getpwuid(getuid());
@@ -21,7 +21,7 @@ char *getUsername() {
 char *getMachine() {
     char *machine = malloc(_SC_HOST_NAME_MAX);
     if (!machine) {
-        fprintf(stderr, "Memory allocation failed.");
+        perror("Memory allocation failed.");
         exit(EXIT_FAILURE);
     }
     if (gethostname(machine, _SC_HOST_NAME_MAX) != 0) {
@@ -44,7 +44,7 @@ char *getPromptCommand(const char *username, const char *machine, const bool roo
     }
     char *comm = malloc(space);
     if (!comm) {
-        fprintf(stderr, "Memory allocation failed.");
+        perror("Memory allocation failed.");
         exit(EXIT_FAILURE);
     }
     if (sprintf(comm, "%s%s%s%s", username, SEPARATOR, machine, promptTerminator) < 0) {
@@ -66,12 +66,12 @@ void populate(Prompt *prompt) {
     prompt->machine = strdup(getMachine());
     prompt->isRoot = isRoot();
     if (!prompt->username || !prompt->machine) {
-        fprintf(stderr, "Memory allocation failed.");
+        perror("Memory allocation failed.");
         exit(EXIT_FAILURE);
     }
     prompt->comm = strdup(getPromptCommand(prompt->username, prompt->machine, prompt->isRoot));
     if (!prompt->comm) {
-        fprintf(stderr, "Memory allocation failed.");
+        perror("Memory allocation failed.");
         exit(EXIT_FAILURE);
     }
 }
@@ -79,7 +79,7 @@ void populate(Prompt *prompt) {
 Prompt *newPrompt() {
     Prompt *prompt = malloc(sizeof(Prompt));
     if (!prompt) {
-        fprintf(stderr, "Memory allocation failed.");
+        perror("Memory allocation failed.");
         exit(EXIT_FAILURE);
     }
     populate(prompt);
