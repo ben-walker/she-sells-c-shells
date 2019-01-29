@@ -5,7 +5,10 @@
 %}
 WORD [a-zA-Z0-9\/\.-]+
 SPECIAL [()><|&;*]
+
 %option noyywrap
+%option nounput
+%option noinput
 
 %%
 
