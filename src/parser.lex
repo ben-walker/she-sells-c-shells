@@ -5,8 +5,10 @@
 %}
 WORD [a-zA-Z0-9\/\.-]+
 SPECIAL [()><|&;*]
+%option noyywrap
 
 %%
+
 %{
 argCount = 0;
 args[0] = NULL;
