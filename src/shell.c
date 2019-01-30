@@ -3,6 +3,8 @@
 #include "commandProcessor.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
 
 extern char **getln();
 
@@ -11,15 +13,19 @@ void getArgs(const char *prompt, char ***line) {
     *line = getln();
 }
 
-void freeArgs(char **args) {
-    for (int i = 0; args[i] != NULL; i++)
+void destroyArgs(char **args) {
+    for (int i = 0; args[i] != NULL; i += 1)
         free(args[i]);
 }
 
 void cleanup(Prompt *prompt, char **args) {
     destroy(prompt);
-    freeArgs(args);
+    destroyArgs(args);
     exit(EXIT_SUCCESS);
+}
+
+bool shouldExit(char **args) {
+    return strcmp(args[0], "exit") == 0;
 }
 
 void commandLoop(Prompt *prompt) {
@@ -27,7 +33,7 @@ void commandLoop(Prompt *prompt) {
 
     while (true) {
         getArgs(prompt->comm, &args);
-        if (processCommand(args) == -1)
+        if (shouldExit(args))
             break;
         update(prompt);
     }
