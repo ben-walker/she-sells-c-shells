@@ -11,6 +11,7 @@ SPECIAL [()><|&;*]
 QUOTED  \"[^\"]*\"
 %%
     argCount = 0;
+    args[0] = NULL;
 
 {WORD}|{SPECIAL}|{QUOTED} {
     if (argCount < NUM_ARGS - 1) {
