@@ -8,4 +8,6 @@ static const char *ARGS = "args";
 
 bool internalCmd(const char *cmd);
 
+void runInternal(char **args);
+
 #endif // BUILTIN_BUDDY_
