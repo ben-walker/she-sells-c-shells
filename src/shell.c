@@ -28,13 +28,19 @@ bool shouldExit(char **args) {
     return strcmp(args[0], "exit") == 0;
 }
 
+bool blank(char **args) {
+    return args[0] == NULL;
+}
+
 void commandLoop(Prompt *prompt) {
     char **args;
 
     while (true) {
         getArgs(prompt->comm, &args);
-        if (shouldExit(args))
-            break;
+        if (blank(args)) continue;
+        if (shouldExit(args)) break;
+        if (internalCmd(args[0]))
+            runInternal(args);
         update(prompt);
     }
     cleanup(prompt, args);
