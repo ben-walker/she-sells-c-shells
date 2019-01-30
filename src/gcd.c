@@ -3,6 +3,7 @@
 #include <limits.h>
 
 int convertToNum(const char *val, int *numeric) {
+    if (!val) return EXIT_FAILURE;
     char *end = NULL;
     long converted = strtol(val, &end, 0);
 
