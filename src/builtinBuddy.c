@@ -56,11 +56,12 @@ bool internalCmd(const char *cmd) {
     return false;
 }
 
-void runInternal(char **args) {
+int runInternal(char **args) {
     const char *cmd = args[0];
 
     if (strcmp(cmd, GCD) == 0)
-        shellGCD(args[0], args[1], args[2]);
+        return shellGCD(args[0], args[1], args[2]);
     else if (strcmp(cmd, ARGS) == 0)
-        shellArgs(ARGS, args);
+        return shellArgs(ARGS, args);
+    return -1;
 }
