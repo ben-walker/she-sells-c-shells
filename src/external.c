@@ -7,10 +7,12 @@
 int runExternal(char **args) {
     pid_t pid = fork();
     if (pid == -1) {
-        perror("Failed to fork new process.");
+        perror("Failed to fork new process");
         return EXIT_FAILURE;
     } else if (pid == 0) {
         execvp(args[0], args);
+        perror("Failed to execute");
+        return EXIT_FAILURE;
     } else {
         wait(NULL);
     }

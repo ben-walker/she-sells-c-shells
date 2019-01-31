@@ -28,7 +28,7 @@ int shellArgs(const char *cmd, char **args) {
         }
         argsList = realloc(argsList, space);
         if (!argsList) {
-            perror("Memory allocation failed.");
+            perror("Memory allocation failed");
             exit(EXIT_FAILURE);
         }
         if (sprintf(argsList, format, argsList, args[argc]) < 0) {
