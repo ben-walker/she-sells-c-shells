@@ -12,17 +12,27 @@ bool background(char **args) {
     return strcmp(lastArg, "&") == 0;
 }
 
+int forkFailed() {
+    perror("Failed to fork new process");
+    return EXIT_FAILURE;
+}
+
+void parentProcess() {
+    wait(NULL);
+}
+
+int childProcess(char **args) {
+    execvp(args[0], args);
+    perror("Failed to execute");
+    return EXIT_FAILURE;
+}
+
 int runExternal(char **args) {
     pid_t pid = fork();
-    if (pid == -1) {
-        perror("Failed to fork new process");
-        return EXIT_FAILURE;
-    } else if (pid == 0) {
-        execvp(args[0], args);
-        perror("Failed to execute");
-        return EXIT_FAILURE;
-    } else {
-        wait(NULL);
+    switch (pid) {
+        case -1: return forkFailed();
+        case 0: return childProcess(args);
+        default: parentProcess();
     }
     return EXIT_SUCCESS;
 }
