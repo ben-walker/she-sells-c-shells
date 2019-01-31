@@ -1,6 +1,6 @@
 #ifndef EXTERNAL_
 #define EXTERNAL_
 
-void runExternal(char **args);
+int runExternal(char **args);
 
 #endif // EXTERNAL_
