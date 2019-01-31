@@ -1,6 +1,7 @@
 #include "shell.h"
 #include "prompt.h"
 #include "builtinBuddy.h"
+#include "external.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -39,8 +40,7 @@ void commandLoop(Prompt *prompt) {
         getArgs(prompt->comm, &args);
         if (blank(args)) continue;
         if (shouldExit(args)) break;
-        if (internalCmd(args[0]))
-            runInternal(args);
+        internalCmd(args[0]) ? runInternal(args) : runExternal(args);
         update(prompt);
     }
     cleanup(prompt, args);
