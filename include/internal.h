@@ -8,6 +8,6 @@ static const char *ARGS = "args";
 
 bool internalCmd(const char *cmd);
 
-int runInternal(char **args);
+void runInternal(char **argv);
 
 #endif // INTERNAL_

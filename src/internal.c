@@ -1,28 +1,28 @@
 #include "internal.h"
 #include "gcd.h"
+#include "specialArgs.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-int shellGCD(const char *cmd, const char *num1, const char *num2) {
+void shellGCD(const char *cmd, const char *num1, const char *num2) {
     char *pretty = gcdPretty(num1, num2);
     if (pretty == NULL) {
         fprintf(stderr, "Usage: %s number1 number2\n", cmd);
-        return EXIT_FAILURE;
+        return;
     }
     fprintf(stdout, "%s\n", pretty);
     free(pretty);
-    return EXIT_SUCCESS;
 }
 
-int shellArgs(const char *cmd, char **args) {
+void shellArgs(const char *cmd, char **argv) {
     int argc;
     char *argsList = NULL, *format;
     size_t space;
 
-    for (argc = 1; args[argc] != NULL; argc += 1) {
-        format = args[argc + 1] == NULL ? "%s%s" : "%s%s, ";
-        space = snprintf(NULL, 0, format, argsList, args[argc]) + 1;
+    for (argc = 1; argv[argc] != NULL; argc += 1) {
+        format = argv[argc + 1] == NULL ? "%s%s" : "%s%s, ";
+        space = snprintf(NULL, 0, format, argsList, argv[argc]) + 1;
         if (space < 0) {
             fprintf(stderr, "Could not determine size.");
             exit(EXIT_FAILURE);
@@ -32,7 +32,7 @@ int shellArgs(const char *cmd, char **args) {
             perror("Memory allocation failed");
             exit(EXIT_FAILURE);
         }
-        if (sprintf(argsList, format, argsList, args[argc]) < 0) {
+        if (sprintf(argsList, format, argsList, argv[argc]) < 0) {
             fprintf(stderr, "String write failed.");
             exit(EXIT_FAILURE);
         }
@@ -40,11 +40,10 @@ int shellArgs(const char *cmd, char **args) {
 
     if (!argsList) {
         fprintf(stderr, "Usage: %s ...options...\n", cmd);
-        return EXIT_FAILURE;
+        return;
     }
     printf("argc = %d, args = %s\n", argc - 1, argsList);
     free(argsList);
-    return EXIT_SUCCESS;
 }
 
 bool internalCmd(const char *cmd) {
@@ -57,12 +56,13 @@ bool internalCmd(const char *cmd) {
     return false;
 }
 
-int runInternal(char **args) {
-    const char *cmd = args[0];
+void runInternal(char **argv) {
+    char **newArgv = assignRedirections(argv);
+    const char *cmd = newArgv[0];
 
     if (strcmp(cmd, GCD) == 0)
-        return shellGCD(args[0], args[1], args[2]);
+        shellGCD(newArgv[0], newArgv[1], newArgv[2]);
     else if (strcmp(cmd, ARGS) == 0)
-        return shellArgs(ARGS, args);
-    return -1;
+        shellArgs(ARGS, argv);
+    exit(EXIT_SUCCESS);
 }
