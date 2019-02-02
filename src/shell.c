@@ -22,7 +22,6 @@ void destroyArgs(char **args) {
 void cleanup(Prompt *prompt, char **args) {
     destroy(prompt);
     destroyArgs(args);
-    exit(EXIT_SUCCESS);
 }
 
 bool shouldExit(char **args) {
