@@ -1,5 +1,5 @@
-#ifndef BUILTIN_BUDDY_
-#define BUILTIN_BUDDY_
+#ifndef INTERNAL_
+#define INTERNAL_
 
 #include <stdbool.h>
 
@@ -10,4 +10,4 @@ bool internalCmd(const char *cmd);
 
 int runInternal(char **args);
 
-#endif // BUILTIN_BUDDY_
+#endif // INTERNAL_

@@ -1,6 +1,6 @@
 #include "shell.h"
 #include "prompt.h"
-#include "builtinBuddy.h"
+#include "internal.h"
 #include "external.h"
 #include <stdio.h>
 #include <stdlib.h>

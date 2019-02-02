@@ -1,4 +1,4 @@
-#include "builtinBuddy.h"
+#include "internal.h"
 #include "gcd.h"
 #include <string.h>
 #include <stdio.h>
