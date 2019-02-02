@@ -2,15 +2,36 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 enum { NUM_ARGS = 100 };
+const char *OUT_W = ">";
+const char *IN_R = "<";
+
+bool cmdIsRedir(const char *cmd) {
+    const char *redirs[] = { OUT_W, IN_R };
+    int len = sizeof(redirs) / sizeof(redirs[0]);
+    for (int i = 0; i < len; i += 1)
+        if (strcmp(cmd, redirs[i]) == 0)
+            return true;
+    return false;
+}
+
+void buildArgs(char **argv, int *argc, const char *new) {
+    argv[*argc] = strdup(new);
+    if (!argv[*argc]) {
+        perror("Memory allocation failed");
+        exit(EXIT_FAILURE);
+    }
+    *argc = *argc + 1;
+}
 
 char **assignRedirections(char **argv) {
-    int argCount = 0;
+    int argc = 0;
     char *cmd, *fd;
     char **newArgs = malloc(NUM_ARGS * sizeof(char *));
     if (!newArgs) {
-        perror("Memory allocation failed newargs");
+        perror("Memory allocation failed");
         exit(EXIT_FAILURE);
     }
     memset(newArgs, 0, NUM_ARGS);
@@ -18,21 +39,15 @@ char **assignRedirections(char **argv) {
     for (int i = 0; argv[i] != NULL; i += 1) {
         cmd = argv[i];
         fd = argv[i + 1];
+        if (cmdIsRedir(cmd))
+            i += 1;
 
-        if (strcmp(cmd, ">") == 0) {
+        if (strcmp(cmd, OUT_W) == 0)
             freopen(fd, "w", stdout);
-            i += 1;
-        } else if (strcmp(cmd, "<") == 0) {
+        else if (strcmp(cmd, IN_R) == 0)
             freopen(fd, "r", stdin);
-            i += 1;
-        } else {
-            newArgs[argCount] = strdup(cmd);
-            if (!newArgs[argCount]) {
-                perror("Memory allocation failed newargs[i]");
-                exit(EXIT_FAILURE);
-            }
-            argCount += 1;
-        }
+        else
+            buildArgs(newArgs, &argc, cmd);
     }
     return newArgs;
 }
