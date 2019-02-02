@@ -5,12 +5,13 @@
 #include <stdlib.h>
 
 int shellGCD(const char *cmd, const char *num1, const char *num2) {
-    int bigDiv = gcd(num1, num2);
-    if (bigDiv == -1) {
+    char *pretty = gcdPretty(num1, num2);
+    if (pretty == NULL) {
         fprintf(stderr, "Usage: %s number1 number2\n", cmd);
         return EXIT_FAILURE;
     }
-    printf("GCD(%s, %s) = %d\n", num1, num2, bigDiv);
+    fprintf(stdout, "%s\n", pretty);
+    free(pretty);
     return EXIT_SUCCESS;
 }
 
