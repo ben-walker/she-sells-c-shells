@@ -6,7 +6,7 @@
 enum { NUM_ARGS = 100 };
 
 char **assignRedirections(char **argv) {
-    int i = 0, argCount = 0;
+    int argCount = 0;
     char *cmd, *fd;
     char **newArgs = malloc(NUM_ARGS * sizeof(char *));
     if (!newArgs) {
