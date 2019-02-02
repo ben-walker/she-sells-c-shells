@@ -1,7 +1,7 @@
 #include "shell.h"
 #include "prompt.h"
-#include "internal.h"
-#include "external.h"
+#include "processSupervisor.h"
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -14,35 +14,41 @@ void getArgs(const char *prompt, char ***line) {
     *line = getln();
 }
 
-void destroyArgs(char **args) {
-    for (int i = 0; args[i] != NULL; i += 1)
-        free(args[i]);
+void destroyArgs(char **argv) {
+    for (int i = 0; argv[i] != NULL; i += 1)
+        free(argv[i]);
 }
 
-void cleanup(Prompt *prompt, char **args) {
+void cleanup(Prompt *prompt, char **argv) {
     destroy(prompt);
-    destroyArgs(args);
+    destroyArgs(argv);
 }
 
-bool shouldExit(char **args) {
-    return strcmp(args[0], "exit") == 0;
+bool shouldExit(char **argv) {
+    return strcmp(argv[0], "exit") == 0;
 }
 
-bool blank(char **args) {
-    return args[0] == NULL;
+bool blank(char **argv) {
+    return argv[0] == NULL;
 }
 
 void commandLoop(Prompt *prompt) {
-    char **args;
+    char **argv;
 
     while (true) {
-        getArgs(prompt->comm, &args);
-        if (blank(args)) continue;
-        if (shouldExit(args)) break;
-        internalCmd(args[0]) ? runInternal(args) : runExternal(args);
+        getArgs(prompt->comm, &argv);
+        if (blank(argv)) continue;
+        if (shouldExit(argv)) break;
+
+        pid_t pid = fork();
+        switch (pid) {
+            case -1: perror("Failed to fork new process");
+            case 0: child(pid, argv);
+            default: wait(NULL);
+        }
         update(prompt);
     }
-    cleanup(prompt, args);
+    cleanup(prompt, argv);
 }
 
 void boot() {
