@@ -6,7 +6,7 @@
 static const char *GCD = "gcd";
 static const char *ARGS = "args";
 
-bool internalCmd(const char *cmd);
+bool isInternal(const char *cmd);
 
 void runInternal(char **argv);
 

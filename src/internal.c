@@ -46,7 +46,7 @@ void shellArgs(const char *cmd, char **argv) {
     free(argsList);
 }
 
-bool internalCmd(const char *cmd) {
+bool isInternal(const char *cmd) {
     const char *builtins[] = { GCD, ARGS };
     int len = sizeof(builtins) / sizeof(builtins[0]);
 
