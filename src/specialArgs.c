@@ -26,6 +26,13 @@ void buildArgs(char **argv, int *argc, const char *new) {
     *argc = *argc + 1;
 }
 
+void redirectStream(const char *fd, const char *mode, FILE *stream) {
+    if (freopen(fd, mode, stream) == NULL) {
+        perror("freopen");
+        exit(EXIT_FAILURE);
+    }
+}
+
 char **assignRedirections(char **argv) {
     int argc = 0;
     char *cmd, *fd;
@@ -43,9 +50,9 @@ char **assignRedirections(char **argv) {
             i += 1;
 
         if (strcmp(cmd, OUT_W) == 0)
-            freopen(fd, "w", stdout);
+            redirectStream(fd, "w", stdout);
         else if (strcmp(cmd, IN_R) == 0)
-            freopen(fd, "r", stdin);
+            redirectStream(fd, "r", stdin);
         else
             buildArgs(newArgs, &argc, cmd);
     }
