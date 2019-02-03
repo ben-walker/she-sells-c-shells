@@ -60,7 +60,7 @@ void buildArgs(char **argv, int *argc, const char *new) {
     *argc = *argc + 1;
 }
 
-char **assignRedirections(char **argv) {
+char **consumeSpecialArgs(char **argv) {
     int argc = 0;
     char *cmd, *fd;
     char **args = malloc(NUM_ARGS * sizeof(char *));
@@ -73,8 +73,11 @@ char **assignRedirections(char **argv) {
     for (int i = 0; argv[i] != NULL; i += 1) {
         cmd = argv[i];
         fd = argv[i + 1];
+
         if (cmdIsRedirect(cmd))
             i += 1;
+        else if (argv[i + 1] == NULL && isBackground(argv))
+            continue;
 
         if (strcmp(cmd, OUT_W) == 0)
             redirectStream(fd, "w", stdout);

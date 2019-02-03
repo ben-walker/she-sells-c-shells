@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 void runExternal(char **argv) {
-    char **newArgv = assignRedirections(argv);
+    char **newArgv = consumeSpecialArgs(argv);
     execvp(newArgv[0], newArgv);
     perror("execvp");
     exit(EXIT_FAILURE);

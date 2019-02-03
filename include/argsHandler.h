@@ -13,6 +13,6 @@ bool isInternalExit(char **argv);
 
 bool isBackground(char **argv);
 
-char **assignRedirections(char **argv);
+char **consumeSpecialArgs(char **argv);
 
 #endif // ARGS_HANDLER_
