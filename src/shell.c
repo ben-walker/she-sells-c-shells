@@ -1,35 +1,16 @@
 #include "shell.h"
 #include "prompt.h"
 #include "processSupervisor.h"
+#include "argsHandler.h"
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
 
-extern char **getln();
-
-void getArgs(const char *prompt, char ***line) {
-    printf("%s ", prompt);
-    *line = getln();
-}
-
-void destroyArgs(char **argv) {
-    for (int i = 0; argv[i] != NULL; i += 1)
-        free(argv[i]);
-}
-
-void cleanup(Prompt *prompt, char **argv) {
+void shellCleanup(Prompt *prompt, char **argv) {
     destroy(prompt);
-    destroyArgs(argv);
-}
-
-bool shouldExit(char **argv) {
-    return strcmp(argv[0], "exit") == 0;
-}
-
-bool blank(char **argv) {
-    return argv[0] == NULL;
+    freeArgs(argv);
 }
 
 void commandLoop(Prompt *prompt) {
@@ -37,8 +18,8 @@ void commandLoop(Prompt *prompt) {
 
     while (true) {
         getArgs(prompt->comm, &argv);
-        if (blank(argv)) continue;
-        if (shouldExit(argv)) break;
+        if (isBlank(argv)) continue;
+        if (isInternalExit(argv)) break;
 
         pid_t pid = fork();
         switch (pid) {
@@ -48,7 +29,7 @@ void commandLoop(Prompt *prompt) {
         }
         update(prompt);
     }
-    cleanup(prompt, argv);
+    shellCleanup(prompt, argv);
 }
 
 void boot() {
