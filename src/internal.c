@@ -1,7 +1,7 @@
 #include "internal.h"
 #include "gcdBuiltin.h"
 #include "argsBuiltin.h"
-#include "specialArgs.h"
+#include "argsHandler.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>

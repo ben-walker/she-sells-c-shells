@@ -1,5 +1,5 @@
 #include "external.h"
-#include "specialArgs.h"
+#include "argsHandler.h"
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
