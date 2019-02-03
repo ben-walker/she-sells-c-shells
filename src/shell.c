@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <signal.h>
 
 void shellCleanup(Prompt *prompt, char **argv) {
     destroy(prompt);
@@ -33,6 +34,7 @@ void commandLoop(Prompt *prompt) {
 }
 
 void boot() {
+    sigset(SIGCHLD, sigChildHandler);
     Prompt *prompt = newPrompt();
     commandLoop(prompt);
 }
