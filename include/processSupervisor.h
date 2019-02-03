@@ -5,4 +5,6 @@
 
 void child(pid_t pid, char **argv);
 
+void parent(pid_t childPid, char **argv);
+
 #endif // PROCESS_SUPERVISOR_

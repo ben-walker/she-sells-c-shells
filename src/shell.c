@@ -25,7 +25,7 @@ void commandLoop(Prompt *prompt) {
         switch (pid) {
             case -1: perror("fork");
             case 0: child(pid, argv);
-            default: wait(NULL);
+            default: parent(pid, argv);
         }
         update(prompt);
     }
