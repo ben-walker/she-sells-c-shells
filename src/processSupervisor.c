@@ -15,9 +15,14 @@ void foreground(pid_t childPid) {
     }
 }
 
+void background(pid_t childPid) {
+
+}
+
 void parent(pid_t childPid, char **argv) {
     if (!isBackground(argv)) {
         foreground(childPid);
         return;
     }
+    background(childPid);
 }
