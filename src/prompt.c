@@ -69,8 +69,8 @@ void populate(Prompt *prompt) {
         perror("Memory allocation failed");
         exit(EXIT_FAILURE);
     }
-    prompt->comm = strdup(getPromptCommand(prompt->username, prompt->machine, prompt->isRoot));
-    if (!prompt->comm) {
+    prompt->comm = getPromptCommand(prompt->username, prompt->machine, prompt->isRoot);
+    if (prompt->comm == NULL) {
         perror("Memory allocation failed");
         exit(EXIT_FAILURE);
     }
