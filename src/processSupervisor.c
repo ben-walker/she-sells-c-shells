@@ -7,7 +7,7 @@
 void sigChildHandler() {
     pid_t pid;
     while ((pid = waitpid(-1, NULL, WNOHANG)) != -1) {
-        
+        waitpid(pid, NULL, 0);
     }
 }
 
@@ -16,14 +16,11 @@ void child(pid_t pid, char **argv) {
 }
 
 void foreground(pid_t childPid) {
-    if (wait(NULL) == -1) {
-        fprintf(stderr, "Failed to wait for child %d\n", childPid);
-        exit(EXIT_FAILURE);
-    }
+    wait(NULL);
 }
 
 void background(pid_t childPid) {
-    printf("%d\n", childPid);
+    return;
 }
 
 void parent(pid_t childPid, char **argv) {
