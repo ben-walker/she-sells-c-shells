@@ -8,6 +8,7 @@ extern char **getln();
 enum { NUM_ARGS = 100 };
 static const char *OUT_W = ">";
 static const char *IN_R = "<";
+static const char *BACK = "&";
 
 void getArgs(const char *prompt, char ***line) {
     printf("%s ", prompt);
@@ -25,6 +26,13 @@ bool isBlank(char **argv) {
 
 bool isInternalExit(char **argv) {
     return strcmp(argv[0], "exit") == 0;
+}
+
+bool isBackground(char **argv) {
+    char *lastArg = NULL;
+    for (int i = 0; argv[i] != NULL; i += 1)
+        lastArg = argv[i];
+    return strcmp(lastArg, BACK) == 0;
 }
 
 bool cmdIsRedirect(const char *cmd) {

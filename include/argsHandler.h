@@ -11,6 +11,8 @@ bool isBlank(char **argv);
 
 bool isInternalExit(char **argv);
 
+bool isBackground(char **argv);
+
 char **assignRedirections(char **argv);
 
 #endif // ARGS_HANDLER_
