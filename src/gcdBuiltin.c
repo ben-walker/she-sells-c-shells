@@ -1,4 +1,4 @@
-#include "gcd.h"
+#include "gcdBuiltin.h"
 #include <stdlib.h>
 #include <limits.h>
 #include <stdio.h>
@@ -30,11 +30,11 @@ int gcd(const char *valOne, const char *valTwo) {
 
 char *gcdPretty(const char *valOne, const char *valTwo) {
     int gcdVal = gcd(valOne, valTwo);
-    const char *template = "GCD(%s, %s) = %d";
+    const char *template = "%s(%s, %s) = %d";
     if (gcdVal == -1)
         return NULL;
 
-    const size_t space = snprintf(NULL, 0, template, valOne, valTwo, gcdVal) + 1;
+    const size_t space = snprintf(NULL, 0, template, GCD_CMD, valOne, valTwo, gcdVal) + 1;
     if (space < 0) {
         fprintf(stderr, "Could not form string.");
         exit(EXIT_FAILURE);
@@ -44,7 +44,7 @@ char *gcdPretty(const char *valOne, const char *valTwo) {
         perror("Memory allocation failed");
         exit(EXIT_FAILURE);
     }
-    if (sprintf(pretty, template, valOne, valTwo, gcdVal) < 0) {
+    if (sprintf(pretty, template, GCD_CMD, valOne, valTwo, gcdVal) < 0) {
         fprintf(stderr, "Could not construct gcd string.");
         exit(EXIT_FAILURE);
     }

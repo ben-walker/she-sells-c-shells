@@ -1,5 +1,5 @@
 #include "internal.h"
-#include "gcd.h"
+#include "gcdBuiltin.h"
 #include "specialArgs.h"
 #include <string.h>
 #include <stdio.h>
