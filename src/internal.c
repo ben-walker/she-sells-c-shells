@@ -37,12 +37,13 @@ bool isInternal(const char *cmd) {
 }
 
 void runInternal(char **argv) {
-    char **newArgv = assignRedirections(argv);
-    const char *cmd = newArgv[0];
+    char **redirArgs = assignRedirections(argv);
+    const char *cmd = redirArgs[0];
 
     if (strcmp(cmd, GCD_CMD) == 0)
-        shellGcd(newArgv[0], newArgv[1], newArgv[2]);
+        shellGcd(redirArgs[0], redirArgs[1], redirArgs[2]);
     else if (strcmp(cmd, ARGS_CMD) == 0)
         shellArgs(argv);
+    freeArgs(redirArgs);
     exit(EXIT_SUCCESS);
 }
