@@ -3,8 +3,6 @@
 
 #include <stdbool.h>
 
-static const char *ARGS = "args";
-
 bool isInternal(const char *cmd);
 
 void runInternal(char **argv);
