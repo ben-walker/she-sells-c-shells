@@ -41,7 +41,7 @@ char *gcdPretty(const char *valOne, const char *valTwo) {
     }
     char *pretty = malloc(space);
     if (!pretty) {
-        perror("Memory allocation failed");
+        perror("malloc");
         exit(EXIT_FAILURE);
     }
     if (sprintf(pretty, template, GCD_CMD, valOne, valTwo, gcdVal) < 0) {

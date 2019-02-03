@@ -23,7 +23,7 @@ void commandLoop(Prompt *prompt) {
 
         pid_t pid = fork();
         switch (pid) {
-            case -1: perror("Failed to fork new process");
+            case -1: perror("fork");
             case 0: child(pid, argv);
             default: wait(NULL);
         }

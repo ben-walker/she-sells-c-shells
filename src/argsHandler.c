@@ -46,7 +46,7 @@ void redirectStream(const char *fd, const char *mode, FILE *stream) {
 void buildArgs(char **argv, int *argc, const char *new) {
     argv[*argc] = strdup(new);
     if (!argv[*argc]) {
-        perror("Memory allocation failed");
+        perror("strdup");
         exit(EXIT_FAILURE);
     }
     *argc = *argc + 1;
@@ -57,7 +57,7 @@ char **assignRedirections(char **argv) {
     char *cmd, *fd;
     char **args = malloc(NUM_ARGS * sizeof(char *));
     if (!args) {
-        perror("Memory allocation failed");
+        perror("malloc");
         exit(EXIT_FAILURE);
     }
     memset(args, 0, NUM_ARGS);

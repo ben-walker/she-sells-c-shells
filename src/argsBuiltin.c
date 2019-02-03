@@ -22,7 +22,7 @@ void argsIndex(char **argv, char **args, int *argc) {
         }
         *args = realloc(*args, space);
         if (!*args) {
-            perror("Memory allocation failed");
+            perror("realloc");
             exit(EXIT_FAILURE);
         }
         if (sprintf(*args, format, *args, argv[i]) < 0) {
