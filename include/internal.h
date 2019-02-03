@@ -3,7 +3,6 @@
 
 #include <stdbool.h>
 
-static const char *GCD = "gcd";
 static const char *ARGS = "args";
 
 bool isInternal(const char *cmd);

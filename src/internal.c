@@ -47,7 +47,7 @@ void shellArgs(const char *cmd, char **argv) {
 }
 
 bool isInternal(const char *cmd) {
-    const char *builtins[] = { GCD, ARGS };
+    const char *builtins[] = { GCD_CMD, ARGS };
     int len = sizeof(builtins) / sizeof(builtins[0]);
 
     for (int i = 0; i < len; i += 1)
@@ -60,7 +60,7 @@ void runInternal(char **argv) {
     char **newArgv = assignRedirections(argv);
     const char *cmd = newArgv[0];
 
-    if (strcmp(cmd, GCD) == 0)
+    if (strcmp(cmd, GCD_CMD) == 0)
         shellGCD(newArgv[0], newArgv[1], newArgv[2]);
     else if (strcmp(cmd, ARGS) == 0)
         shellArgs(ARGS, argv);
