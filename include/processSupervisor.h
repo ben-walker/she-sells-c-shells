@@ -2,6 +2,7 @@
 #define PROCESS_SUPERVISOR_
 
 #include <stdlib.h>
+#include <sys/types.h>
 
 void sigChildHandler();
 
