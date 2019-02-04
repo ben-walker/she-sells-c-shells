@@ -3,6 +3,7 @@
 #include "internal.h"
 #include "external.h"
 #include <stdio.h>
+#include <sys/wait.h>
 
 void sigChildHandler() {
     pid_t pid;
