@@ -21,6 +21,7 @@ void foreground(pid_t childPid) {
 }
 
 void background(pid_t childPid) {
+    printf("\n[%d] -> background\n\n", childPid);
     return;
 }
 
