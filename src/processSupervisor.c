@@ -17,12 +17,11 @@ void child(pid_t pid, char **argv) {
 }
 
 void foreground(pid_t childPid) {
-    waitpid(childPid, NULL, 0);
+    wait(NULL);
 }
 
 void background(pid_t childPid) {
     printf("\n[%d] -> background\n\n", childPid);
-    return;
 }
 
 void parent(pid_t childPid, char **argv) {
