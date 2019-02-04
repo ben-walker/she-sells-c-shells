@@ -12,7 +12,7 @@ LEX_O = $(OBJ_DIR)/lex.yy.o
 FLEX = flex --outfile=$(LEX_C)
 
 CPPFLAGS += -Iinclude
-CFLAGS += -Wall -pedantic -std=c99 -D_SVID_SOURCE
+CFLAGS += -Wall -pedantic -std=c99 -D_SVID_SOURCE -D_XOPEN_SOURCE=700
 LDFLAGS += $()
 LDLIBS += $()
 
