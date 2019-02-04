@@ -17,7 +17,7 @@ void child(pid_t pid, char **argv) {
 }
 
 void foreground(pid_t childPid) {
-    wait(NULL);
+    waitpid(childPid, NULL, 0);
 }
 
 void background(pid_t childPid) {
