@@ -1,6 +1,8 @@
 #ifndef PROMPT_
 #define PROMPT_
 
+#define _BSD_SOURCE
+
 #include <stdbool.h>
 
 typedef struct Prompt {
