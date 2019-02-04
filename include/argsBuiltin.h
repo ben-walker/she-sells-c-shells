@@ -1,7 +1,7 @@
 #ifndef ARGS_BUILTIN_
 #define ARGS_BUILTIN_
 
-static const char *ARGS_CMD = "args";
+extern const char *ARGS_CMD;
 
 void argsIndex(char **argv, char **args, int *argc);
 

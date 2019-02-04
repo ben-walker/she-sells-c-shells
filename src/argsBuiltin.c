@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+const char *ARGS_CMD = "args";
+
 int calcArgc(char **argv) {
     int argc;
     for (argc = 1; argv[argc] != NULL; argc += 1);
