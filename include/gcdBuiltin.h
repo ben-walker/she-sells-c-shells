@@ -1,7 +1,7 @@
 #ifndef GCD_BUILTIN_
 #define GCD_BUILTIN_
 
-static const char *GCD_CMD = "gcd";
+extern const char *GCD_CMD;
 
 int gcd(const char *valOne, const char *valTwo);
 

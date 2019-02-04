@@ -3,6 +3,8 @@
 #include <limits.h>
 #include <stdio.h>
 
+const char *GCD_CMD = "gcd";
+
 int convertToNum(const char *val, int *numeric) {
     if (!val) return EXIT_FAILURE;
     char *end = NULL;
