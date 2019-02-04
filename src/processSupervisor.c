@@ -5,11 +5,8 @@
 #include <stdio.h>
 #include <sys/wait.h>
 
-void sigChildHandler() {
-    pid_t pid;
-    while ((pid = waitpid(-1, NULL, WNOHANG)) != -1) {
-        waitpid(pid, NULL, 0);
-    }
+void sigChildHandler(int signo, siginfo_t *si, void *data) {
+    waitpid(si->si_pid, NULL, 0);
 }
 
 void child(pid_t pid, char **argv) {
@@ -17,7 +14,7 @@ void child(pid_t pid, char **argv) {
 }
 
 void foreground(pid_t childPid) {
-    wait(NULL);
+    waitpid(childPid, NULL, 0);
 }
 
 void background(pid_t childPid) {

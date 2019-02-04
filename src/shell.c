@@ -14,6 +14,16 @@ void shellCleanup(Prompt *prompt, char **argv) {
     freeArgs(argv);
 }
 
+void sigHandlerSetup() {
+    struct sigaction sa;
+    sa.sa_flags = SA_SIGINFO | SA_RESTART;
+    sa.sa_sigaction = sigChildHandler;
+    if (sigaction(SIGCHLD, &sa, NULL) == -1) {
+        perror("sigaction");
+        exit(EXIT_FAILURE);
+    }
+}
+
 void commandLoop(Prompt *prompt) {
     char **argv;
 
@@ -34,7 +44,7 @@ void commandLoop(Prompt *prompt) {
 }
 
 void boot() {
-    sigset(SIGCHLD, sigChildHandler);
+    sigHandlerSetup();
     Prompt *prompt = newPrompt();
     commandLoop(prompt);
 }
