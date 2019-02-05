@@ -29,6 +29,7 @@ void removeProcess(const pid_t pid) {
     PCB *current, *previous = NULL;
 
     for (current = procs; current != NULL; previous = current, current = current->next) {
+        printf("checking %d\n", current->pid);
         if (current->pid == pid) {
             if (previous == NULL)
                 procs = current->next;
@@ -38,6 +39,15 @@ void removeProcess(const pid_t pid) {
             return;
         }
     }
+}
+
+bool isProcBackground(const pid_t pid) {
+    PCB *current = procs;
+    while (current != NULL) {
+        if (current->pid == pid)
+            return current->background;
+    }
+    return false;
 }
 
 void procPeek() {

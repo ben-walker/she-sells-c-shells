@@ -14,6 +14,8 @@ void trackProcess(const pid_t pid, bool background);
 
 void removeProcess(const pid_t pid);
 
+bool isProcBackground(const pid_t pid);
+
 void procPeek();
 
 #endif // PROCESS_LIST_
