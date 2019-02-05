@@ -2,14 +2,16 @@
 #include "argsHandler.h"
 #include "internal.h"
 #include "external.h"
+#include "processList.h"
 #include <stdio.h>
 #include <sys/wait.h>
 
 volatile sig_atomic_t closedPid = 0;
 
 void sigChildHandler(int signo, siginfo_t *si, void *data) {
-    if (waitpid(si->si_pid, NULL, 0) != -1)
+    if (waitpid(si->si_pid, NULL, 0) != -1) {
         closedPid = si->si_pid;
+    }
 }
 
 void child(pid_t pid, char **argv) {
@@ -17,10 +19,12 @@ void child(pid_t pid, char **argv) {
 }
 
 void foreground(pid_t childPid) {
+    trackProcess(childPid, false);
     waitpid(childPid, NULL, 0);
 }
 
 void background(pid_t childPid) {
+    trackProcess(childPid, true);
     printf("[%d] -> background\n", childPid);
 }
 
