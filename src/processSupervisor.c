@@ -5,8 +5,11 @@
 #include <stdio.h>
 #include <sys/wait.h>
 
+volatile sig_atomic_t closedPid = 0;
+
 void sigChildHandler(int signo, siginfo_t *si, void *data) {
-    waitpid(si->si_pid, NULL, 0);
+    if (waitpid(si->si_pid, NULL, 0) != -1)
+        closedPid = si->si_pid;
 }
 
 void child(pid_t pid, char **argv) {
@@ -18,7 +21,7 @@ void foreground(pid_t childPid) {
 }
 
 void background(pid_t childPid) {
-    printf("\n[%d] -> background\n\n", childPid);
+    printf("[%d] -> background\n", childPid);
 }
 
 void parent(pid_t childPid, char **argv) {
