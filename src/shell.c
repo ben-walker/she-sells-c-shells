@@ -28,6 +28,7 @@ void commandLoop(Prompt *prompt) {
     char **argv;
 
     while (true) {
+        checkForClosedProc();
         getArgs(prompt->comm, &argv);
         if (isBlank(argv)) continue;
         if (isInternalExit(argv)) break;

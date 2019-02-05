@@ -4,9 +4,9 @@
 #include <stdlib.h>
 #include <sys/types.h>
 
-extern volatile sig_atomic_t closedPid;
-
 void sigChildHandler();
+
+void checkForClosedProc();
 
 void child(pid_t pid, char **argv);
 
