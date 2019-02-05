@@ -60,3 +60,13 @@ void procPeek() {
         current = current->next;
     }
 }
+
+void destroyProcList() {
+    PCB *current = procs, *next;
+    while (current != NULL) {
+        next = current->next;
+        free(current);
+        current = next;
+    }
+    procs = NULL;
+}

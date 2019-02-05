@@ -2,6 +2,7 @@
 #include "prompt.h"
 #include "processSupervisor.h"
 #include "argsHandler.h"
+#include "processList.h"
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,6 +13,7 @@
 void shellCleanup(Prompt *prompt, char **argv) {
     destroy(prompt);
     freeArgs(argv);
+    destroyProcList();
 }
 
 void sigHandlerSetup() {

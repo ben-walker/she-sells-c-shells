@@ -18,4 +18,6 @@ bool isProcBackground(const pid_t pid);
 
 void procPeek();
 
+void destroyProcList();
+
 #endif // PROCESS_LIST_
