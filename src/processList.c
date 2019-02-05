@@ -46,6 +46,7 @@ bool isProcBackground(const pid_t pid) {
     while (current != NULL) {
         if (current->pid == pid)
             return current->background;
+        current = current->next;
     }
     return false;
 }
