@@ -23,7 +23,7 @@
 
 /**
  * shellCleanup()
- * Call library functions to release allocated memory.
+ * Call library functions to release allocated memory
  */
 void shellCleanup(Prompt *prompt, char **argv) {
     destroy(prompt);
@@ -33,12 +33,12 @@ void shellCleanup(Prompt *prompt, char **argv) {
 
 /**
  * sigHandlerSetup()
- * Associate function with the SIGCHLD signal.
+ * Associate function with the SIGCHLD signal
  */
 void sigHandlerSetup() {
     struct sigaction sa;
-    sa.sa_flags = SA_SIGINFO // SA_SIGINFO - add siginfo_t argument to signal handler.
-        | SA_RESTART; // SA_RESTART - system calls restartable across signals.
+    sa.sa_flags = SA_SIGINFO // SA_SIGINFO - add siginfo_t argument to signal handler
+        | SA_RESTART; // SA_RESTART - system calls restartable across signals
     sa.sa_sigaction = sigChildHandler;
     if (sigaction(SIGCHLD, &sa, NULL) == -1) {
         perror("sigaction");
@@ -48,7 +48,7 @@ void sigHandlerSetup() {
 
 /**
  * commandLoop()
- * Get user arguments and fork to process child/parent.
+ * Get user arguments and fork to process child/parent
  */
 void commandLoop(Prompt *prompt) {
     char **argv;
@@ -72,7 +72,7 @@ void commandLoop(Prompt *prompt) {
 
 /**
  * boot()
- * Called by main; sets up SIGCHLD handler/prompt, starts command loop.
+ * Called by main; sets up SIGCHLD handler/prompt, starts command loop
  */
 void boot() {
     sigHandlerSetup();
