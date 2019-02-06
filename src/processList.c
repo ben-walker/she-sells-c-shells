@@ -1,9 +1,28 @@
+/**
+ * Ben Walker
+ * CIS*3110
+ * 
+ * A library to maintain a linked list of active processes and
+ * their current state (Open or Closed).
+ */
+
 #include "processList.h"
 #include <stdlib.h>
 #include <stdio.h>
 
+/**
+ * The PCB list is static because it needs to be acted on
+ * from within the SIGCHLD handler, and unfortunately it's impossible
+ * to pass data to these handlers.
+ * 
+ * Acts as stateful PCB list for the entire shell.
+ */
 static PCB *procs = NULL;
 
+/**
+ * createProcList()
+ * Creates the first element of the PCB list
+ */
 void createProcList(const pid_t pid, bool background) {
     procs = malloc(sizeof(PCB));
     procs->pid = pid;
@@ -12,6 +31,10 @@ void createProcList(const pid_t pid, bool background) {
     procs->next = NULL;
 }
 
+/**
+ * trackProcess()
+ * Add a process to the end of the PCB list with Open state
+ */
 void trackProcess(const pid_t pid, bool background) {
     if (procs == NULL) {
         createProcList(pid, background);
@@ -28,14 +51,19 @@ void trackProcess(const pid_t pid, bool background) {
     current->next->next = NULL;
 }
 
+/**
+ * removeProcess()
+ * Remove process from PCB list with matching pid.
+ */
 void removeProcess(const pid_t pid) {
     PCB *current, *previous = NULL;
 
+    // track previous PCB as it will replace the one we remove
     for (current = procs; current != NULL; previous = current, current = current->next) {
         if (current->pid == pid) {
-            if (previous == NULL)
+            if (previous == NULL) // remove the first element
                 procs = current->next;
-            else
+            else // leapfrog the current element (omit it from the list)
                 previous->next = current->next;
             free(current);
             return;
@@ -43,6 +71,10 @@ void removeProcess(const pid_t pid) {
     }
 }
 
+/**
+ * closeProcess()
+ * Mark a PCB with matching pid as Closed
+ */
 void closeProcess(const pid_t pid) {
     PCB *current = procs;
     while (current != NULL) {
@@ -54,6 +86,10 @@ void closeProcess(const pid_t pid) {
     }
 }
 
+/**
+ * getFirstClosedProcess()
+ * Return pointer to the first process with Closed state or NULL
+ */
 PCB *getFirstClosedProcess() {
     PCB *current = procs;
     while (current != NULL) {
@@ -64,6 +100,10 @@ PCB *getFirstClosedProcess() {
     return NULL;
 }
 
+/**
+ * procPeek()
+ * Print out processes currently in the PCB list and their background status
+ */
 void procPeek() {
     PCB *current = procs;
     printf("Processes:\n");
@@ -74,6 +114,10 @@ void procPeek() {
     }
 }
 
+/**
+ * destroyProcList()
+ * Release all memory from the PCB list
+ */
 void destroyProcList() {
     PCB *current = procs, *next;
     while (current != NULL) {
