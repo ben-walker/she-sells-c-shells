@@ -8,9 +8,8 @@
 static volatile sig_atomic_t closedPid = 0;
 
 void sigChildHandler(int signo, siginfo_t *si, void *data) {
-    if (waitpid(si->si_pid, NULL, 0) != -1) {
+    if (waitpid(si->si_pid, NULL, 0) != -1)
         closedPid = si->si_pid;
-    }
 }
 
 void checkForClosedProc(PCB *procs) {
