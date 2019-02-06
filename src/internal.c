@@ -8,6 +8,7 @@
 #include "internal.h"
 #include "gcdBuiltin.h"
 #include "argsBuiltin.h"
+#include "randBuiltin.h"
 #include "argsHandler.h"
 #include <string.h>
 #include <stdio.h>
@@ -42,11 +43,19 @@ void shellArgs(char **argv) {
 }
 
 /**
+ * shellRand()
+ * Run the internal 'rand' command and print result
+ */
+void shellRand(const char *min, const char *max) {
+    printf("%d\n", randomRange(min, max));
+}
+
+/**
  * isInternal()
  * Returns true if the string cmd is an internal shell command
  */
 bool isInternal(const char *cmd) {
-    const char *builtins[] = { GCD_CMD, ARGS_CMD };
+    const char *builtins[] = { GCD_CMD, ARGS_CMD, RAND_CMD };
     int len = sizeof(builtins) / sizeof(builtins[0]); // calculate list length
 
     for (int i = 0; i < len; i += 1)
@@ -68,6 +77,8 @@ void runInternal(char **argv) {
         shellGcd(redirArgs[0], redirArgs[1], redirArgs[2]);
     else if (strcmp(cmd, ARGS_CMD) == 0)
         shellArgs(argv);
+    else if (strcmp(cmd, RAND_CMD) == 0)
+        shellRand(redirArgs[1], redirArgs[2]);
 
     freeArgs(redirArgs);
     exit(EXIT_SUCCESS);
