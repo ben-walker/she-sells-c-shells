@@ -20,7 +20,6 @@
 #include <stdbool.h>
 #include <string.h>
 #include <signal.h>
-#include <time.h>
 
 /**
  * shellCleanup()
@@ -45,14 +44,6 @@ void sigHandlerSetup() {
         perror("sigaction");
         exit(EXIT_FAILURE);
     }
-}
-
-/**
- * seedRandom()
- * Seed pseudorandom number generation, should only be called once
- */
-void seedRandom() {
-    srand(time(NULL));
 }
 
 /**
@@ -85,7 +76,6 @@ void commandLoop(Prompt *prompt) {
  */
 void boot() {
     sigHandlerSetup();
-    seedRandom();
     Prompt *prompt = newPrompt();
     commandLoop(prompt);
 }
