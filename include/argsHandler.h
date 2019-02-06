@@ -1,3 +1,10 @@
+/**
+ * Ben Walker
+ * CIS*3110
+ * 
+ * A library for processing a list of user arguments
+ */
+
 #ifndef ARGS_HANDLER_
 #define ARGS_HANDLER_
 
