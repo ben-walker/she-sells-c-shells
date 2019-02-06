@@ -2,18 +2,21 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-PCB *createProcList(const pid_t pid, bool background) {
-    PCB *procs = malloc(sizeof(PCB));
+static PCB *procs = NULL;
+
+void createProcList(const pid_t pid, bool background) {
+    procs = malloc(sizeof(PCB));
     procs->pid = pid;
     procs->background = background;
     procs->next = NULL;
-    return procs;
 }
 
-int trackProcess(const pid_t pid, bool background, PCB *head) {
-    if (head == NULL)
-        return -1;
-    PCB *current = head;
+void trackProcess(const pid_t pid, bool background) {
+    if (procs == NULL) {
+        createProcList(pid, background);
+        return;
+    }
+    PCB *current = procs;
     while (current->next != NULL)
         current = current->next;
 
@@ -21,16 +24,15 @@ int trackProcess(const pid_t pid, bool background, PCB *head) {
     current->next->pid = pid;
     current->next->background = background;
     current->next->next = NULL;
-    return 0;
 }
 
-void removeProcess(const pid_t pid, PCB **head) {
+void removeProcess(const pid_t pid) {
     PCB *current, *previous = NULL;
 
-    for (current = *head; current != NULL; previous = current, current = current->next) {
+    for (current = procs; current != NULL; previous = current, current = current->next) {
         if (current->pid == pid) {
             if (previous == NULL)
-                *head = current->next;
+                procs = current->next;
             else
                 previous->next = current->next;
             free(current);
@@ -39,8 +41,8 @@ void removeProcess(const pid_t pid, PCB **head) {
     }
 }
 
-bool isProcBackground(const pid_t pid, PCB *head) {
-    PCB *current = head;
+bool isProcBackground(const pid_t pid) {
+    PCB *current = procs;
     while (current != NULL) {
         if (current->pid == pid)
             return current->background;
@@ -49,8 +51,8 @@ bool isProcBackground(const pid_t pid, PCB *head) {
     return false;
 }
 
-void procPeek(PCB *head) {
-    PCB *current = head;
+void procPeek() {
+    PCB *current = procs;
     printf("Processes:\n");
     while (current != NULL) {
         const char *status = current->background ? "background" : "foreground";
@@ -59,12 +61,12 @@ void procPeek(PCB *head) {
     }
 }
 
-void destroyProcList(PCB *head) {
-    PCB *current = head, *next;
+void destroyProcList() {
+    PCB *current = procs, *next;
     while (current != NULL) {
         next = current->next;
         free(current);
         current = next;
     }
-    head = NULL;
+    procs = NULL;
 }

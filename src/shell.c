@@ -10,10 +10,10 @@
 #include <string.h>
 #include <signal.h>
 
-void shellCleanup(Prompt *prompt, char **argv, PCB *procs) {
+void shellCleanup(Prompt *prompt, char **argv) {
     destroy(prompt);
     freeArgs(argv);
-    destroyProcList(procs);
+    destroyProcList();
 }
 
 void sigHandlerSetup() {
@@ -28,10 +28,9 @@ void sigHandlerSetup() {
 
 void commandLoop(Prompt *prompt) {
     char **argv;
-    PCB *procs = createProcList(getpid(), true);
 
     while (true) {
-        checkForClosedProc(procs);
+        checkForClosedProc();
         getArgs(prompt->comm, &argv);
         if (isBlank(argv)) continue;
         if (isInternalExit(argv)) break;
@@ -40,11 +39,11 @@ void commandLoop(Prompt *prompt) {
         switch (pid) {
             case -1: perror("fork");
             case 0: child(pid, argv);
-            default: parent(pid, argv, procs);
+            default: parent(pid, argv);
         }
         update(prompt);
     }
-    shellCleanup(prompt, argv, procs);
+    shellCleanup(prompt, argv);
 }
 
 void boot() {

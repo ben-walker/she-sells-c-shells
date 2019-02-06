@@ -10,16 +10,14 @@ typedef struct PCB {
     struct PCB *next;
 } PCB;
 
-PCB *createProcList(const pid_t pid, bool background);
+void trackProcess(const pid_t pid, bool background);
 
-int trackProcess(const pid_t pid, bool background, PCB *head);
+void removeProcess(const pid_t pid);
 
-void removeProcess(const pid_t pid, PCB **head);
+bool isProcBackground(const pid_t pid);
 
-bool isProcBackground(const pid_t pid, PCB *head);
+void procPeek();
 
-void procPeek(PCB *head);
-
-void destroyProcList(PCB *head);
+void destroyProcList();
 
 #endif // PROCESS_LIST_

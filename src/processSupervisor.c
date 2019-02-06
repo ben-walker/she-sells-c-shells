@@ -2,6 +2,7 @@
 #include "argsHandler.h"
 #include "internal.h"
 #include "external.h"
+#include "processList.h"
 #include <stdio.h>
 #include <sys/wait.h>
 
@@ -12,11 +13,11 @@ void sigChildHandler(int signo, siginfo_t *si, void *data) {
         closedPid = si->si_pid;
 }
 
-void checkForClosedProc(PCB *procs) {
+void checkForClosedProc() {
     if (closedPid != 0) {
-        if (isProcBackground(closedPid, procs))
+        if (isProcBackground(closedPid))
             printf("[%d] -> done\n", closedPid);
-        removeProcess(closedPid, &procs);
+        removeProcess(closedPid);
         closedPid = 0;
     }
 }
@@ -25,20 +26,20 @@ void child(pid_t pid, char **argv) {
     isInternal(argv[0]) ? runInternal(argv) : runExternal(argv);
 }
 
-void foreground(pid_t childPid, PCB *procs) {
-    trackProcess(childPid, false, procs);
+void foreground(pid_t childPid) {
+    trackProcess(childPid, false);
     waitpid(childPid, NULL, 0);
 }
 
-void background(pid_t childPid, PCB *procs) {
-    trackProcess(childPid, true, procs);
+void background(pid_t childPid) {
+    trackProcess(childPid, true);
     printf("[%d] -> background\n", childPid);
 }
 
-void parent(pid_t childPid, char **argv, PCB *procs) {
+void parent(pid_t childPid, char **argv) {
     if (!isBackground(argv)) {
-        foreground(childPid, procs);
+        foreground(childPid);
         return;
     }
-    background(childPid, procs);
+    background(childPid);
 }
