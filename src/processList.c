@@ -8,6 +8,7 @@ void createProcList(const pid_t pid, bool background) {
     procs = malloc(sizeof(PCB));
     procs->pid = pid;
     procs->background = background;
+    procs->state = Open;
     procs->next = NULL;
 }
 
@@ -23,6 +24,7 @@ void trackProcess(const pid_t pid, bool background) {
     current->next = malloc(sizeof(PCB));
     current->next->pid = pid;
     current->next->background = background;
+    current->next->state = Open;
     current->next->next = NULL;
 }
 

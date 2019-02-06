@@ -4,10 +4,16 @@
 #include <stdbool.h>
 #include <sys/types.h>
 
+typedef enum procState {
+    Open,
+    Closed
+} procState;
+
 typedef struct PCB {
     pid_t pid;
     bool background;
     struct PCB *next;
+    procState state;
 } PCB;
 
 void trackProcess(const pid_t pid, bool background);
