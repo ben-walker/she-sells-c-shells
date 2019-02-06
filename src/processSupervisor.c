@@ -6,19 +6,17 @@
 #include <stdio.h>
 #include <sys/wait.h>
 
-static volatile sig_atomic_t closedPid = 0;
-
 void sigChildHandler(int signo, siginfo_t *si, void *data) {
     if (waitpid(si->si_pid, NULL, 0) != -1)
-        closedPid = si->si_pid;
+        closeProcess(si->si_pid);
 }
 
 void checkForClosedProc() {
-    if (closedPid != 0) {
-        if (isProcBackground(closedPid))
-            printf("[%d] -> done\n", closedPid);
-        removeProcess(closedPid);
-        closedPid = 0;
+    PCB *closedProc;
+    while ((closedProc = getFirstClosedProcess()) != NULL) {
+        if (closedProc->background)
+            printf("[%d] -> done\n", closedProc->pid);
+        removeProcess(closedProc->pid);
     }
 }
 
