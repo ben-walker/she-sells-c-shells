@@ -62,7 +62,7 @@ void commandLoop(Prompt *prompt) {
         pid_t pid = fork();
         switch (pid) {
             case -1: perror("fork");
-            case 0: child(pid, argv);
+            case 0: child(argv);
             default: parent(pid, argv);
         }
         update(prompt); // if the user somehow switched to root, this will reflect that change
