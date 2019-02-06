@@ -20,7 +20,9 @@ void trackProcess(const pid_t pid, bool background);
 
 void removeProcess(const pid_t pid);
 
-bool isProcBackground(const pid_t pid);
+void closeProcess(const pid_t pid);
+
+PCB *getFirstClosedProcess();
 
 void procPeek();
 

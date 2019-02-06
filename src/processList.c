@@ -43,14 +43,25 @@ void removeProcess(const pid_t pid) {
     }
 }
 
-bool isProcBackground(const pid_t pid) {
+void closeProcess(const pid_t pid) {
     PCB *current = procs;
     while (current != NULL) {
-        if (current->pid == pid)
-            return current->background;
+        if (current->pid == pid) {
+            current->state = Closed;
+            return;
+        }
         current = current->next;
     }
-    return false;
+}
+
+PCB *getFirstClosedProcess() {
+    PCB *current = procs;
+    while (current != NULL) {
+        if (current->state == Closed)
+            return current;
+        current = current->next;
+    }
+    return NULL;
 }
 
 void procPeek() {
