@@ -1,3 +1,11 @@
+/**
+ * Ben Walker
+ * CIS*3110
+ * 
+ * Implementation of the 'gcd' builtin to find the greatest
+ * common divisor of two numbers (int or hex)
+ */
+
 #include "gcdBuiltin.h"
 #include <stdlib.h>
 #include <limits.h>
@@ -5,23 +13,37 @@
 
 const char *GCD_CMD = "gcd";
 
+/**
+ * convertToNum()
+ * Convert string to integer, populate int pointer with result
+ */
 int convertToNum(const char *val, int *numeric) {
     if (!val) return EXIT_FAILURE;
     char *end = NULL;
     long converted = strtol(val, &end, 0);
 
+    // detect possible strtol errors
     if (converted == LONG_MAX || converted == LONG_MIN || end == val)
         return EXIT_FAILURE;
     *numeric = converted;
     return EXIT_SUCCESS;
 }
 
+/**
+ * recursiveGcd()
+ * Calculate gcd recursively, return result
+ */
 int recursiveGcd(const int numOne, const int numTwo) {
     if (numTwo != 0)
         return(recursiveGcd(numTwo, numOne % numTwo));
     return numOne;
 }
 
+/**
+ * gcd()
+ * Use the above functions to calculate the gcd of two numbers
+ * passed as strings.
+ */
 int gcd(const char *valOne, const char *valTwo) {
     int numOne, numTwo;
     if (convertToNum(valOne, &numOne) == EXIT_FAILURE ||
@@ -30,6 +52,10 @@ int gcd(const char *valOne, const char *valTwo) {
     return recursiveGcd(numOne, numTwo);
 }
 
+/**
+ * gcdPretty()
+ * Format wrapper for gcd()
+ */
 char *gcdPretty(const char *valOne, const char *valTwo) {
     int gcdVal = gcd(valOne, valTwo);
     const char *template = "%s(%s, %s) = %d";
