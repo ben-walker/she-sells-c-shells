@@ -1,3 +1,10 @@
+/**
+ * Ben Walker
+ * CIS*3110
+ * 
+ * A library for running internal shell commands.
+ */
+
 #ifndef INTERNAL_
 #define INTERNAL_
 

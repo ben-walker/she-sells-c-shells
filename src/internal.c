@@ -1,3 +1,10 @@
+/**
+ * Ben Walker
+ * CIS*3110
+ * 
+ * A library for running internal shell commands.
+ */
+
 #include "internal.h"
 #include "gcdBuiltin.h"
 #include "argsBuiltin.h"
@@ -6,6 +13,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/**
+ * shellGcd()
+ * Run the internal 'gcd' command and print result/usage statement
+ */
 void shellGcd(const char *cmd, const char *num1, const char *num2) {
     char *pretty = gcdPretty(num1, num2);
     if (pretty == NULL) {
@@ -16,19 +27,27 @@ void shellGcd(const char *cmd, const char *num1, const char *num2) {
     free(pretty);
 }
 
+/**
+ * shellArgs()
+ * Run the internal 'args' command and print result/usage statement
+ */
 void shellArgs(char **argv) {
     char *args = NULL;
     int argc;
-    argsIndex(argv, &args, &argc);
+    argsIndex(argv, &args, &argc); // populate args and argc
     !args
         ? fprintf(stderr, "Usage: %s ...options...\n", ARGS_CMD)
         : printf("argc = %d, args = %s\n", argc, args);
     free(args);
 }
 
+/**
+ * isInternal()
+ * Returns true if the string cmd is an internal shell command
+ */
 bool isInternal(const char *cmd) {
     const char *builtins[] = { GCD_CMD, ARGS_CMD };
-    int len = sizeof(builtins) / sizeof(builtins[0]);
+    int len = sizeof(builtins) / sizeof(builtins[0]); // calculate list length
 
     for (int i = 0; i < len; i += 1)
         if (strcmp(cmd, builtins[i]) == 0)
@@ -36,7 +55,12 @@ bool isInternal(const char *cmd) {
     return false;
 }
 
+/**
+ * runInternal()
+ * Setup I/O redirections, then determine/run the correct builtin
+ */
 void runInternal(char **argv) {
+    // redirArgs is the argv list without any file I/O stuff
     char **redirArgs = consumeSpecialArgs(argv);
     const char *cmd = redirArgs[0];
 
