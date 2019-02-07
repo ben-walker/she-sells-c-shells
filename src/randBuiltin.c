@@ -6,13 +6,17 @@
  */
 
 #include "randBuiltin.h"
+#include "numberHelp.h"
 #include <stdlib.h>
+#include <sys/time.h>
 #include <time.h>
 #include <stdbool.h>
 #include <unistd.h>
 
 const char *RAND_CMD = "rand";
 static bool init = false; // tracks whether random generation has been initialized
+const int DEF_MIN = 0; // default minimum random value
+const int DEF_MAX = 100; // default maximum random value
 
 /**
  * seedRandom()
@@ -21,7 +25,9 @@ static bool init = false; // tracks whether random generation has been initializ
  */
 void seedRandom() {
     if (!init) {
-        srand(time(NULL));
+        struct timeval time;
+        gettimeofday(&time, NULL);
+        srand((time.tv_sec * 1000) + (time.tv_usec / 1000)); // initialize random with microsecond resolution
         init = true;
     }
 }
@@ -32,6 +38,10 @@ void seedRandom() {
  */
 int randomRange(const char *minRaw, const char *maxRaw) {
     seedRandom();
-    int max = 100, min = 0;
+    int min = -1, max = -1;
+    convertToNum(minRaw, &min);
+    convertToNum(maxRaw, &max);
+    min = min == -1 ? DEF_MIN : min;
+    max = max == -1 ? DEF_MAX : max;
     return rand() % (max + 1 - min) + min;
 }
