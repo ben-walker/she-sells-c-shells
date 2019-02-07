@@ -7,7 +7,7 @@
     int argCount;
 
 WORD    [a-zA-Z0-9\/\.-]+
-SPECIAL [()><|&;*]
+SPECIAL [12]?[()><|&;*]+
 QUOTED  \"[^\"]*\"
 %%
     argCount = 0;
