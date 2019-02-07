@@ -45,7 +45,9 @@ void checkForClosedProc() {
  * running it as such.
  */
 void child(char **argv) {
-    isInternal(argv[0]) ? runInternal(argv) : runExternal(argv);
+    char **cleanArgs = consumeSpecialArgs(argv);
+    isInternal(argv[0]) ? runInternal(cleanArgs) : runExternal(cleanArgs);
+    freeArgs(cleanArgs);
 }
 
 /**

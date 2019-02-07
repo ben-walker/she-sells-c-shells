@@ -69,17 +69,13 @@ bool isInternal(const char *cmd) {
  * Setup I/O redirections, then determine/run the correct builtin
  */
 void runInternal(char **argv) {
-    // redirArgs is the argv list without any file I/O stuff
-    char **redirArgs = consumeSpecialArgs(argv);
-    const char *cmd = redirArgs[0];
+    const char *cmd = argv[0];
 
     if (strcmp(cmd, GCD_CMD) == 0)
-        shellGcd(redirArgs[0], redirArgs[1], redirArgs[2]);
+        shellGcd(cmd, argv[1], argv[2]);
     else if (strcmp(cmd, ARGS_CMD) == 0)
         shellArgs(argv);
     else if (strcmp(cmd, RAND_CMD) == 0)
-        shellRand(redirArgs[1], redirArgs[2]);
-
-    freeArgs(redirArgs);
+        shellRand(argv[1], argv[2]);
     exit(EXIT_SUCCESS);
 }

@@ -16,8 +16,7 @@
  * Execute an external shell command
  */
 void runExternal(char **argv) {
-    char **newArgv = consumeSpecialArgs(argv); // consume file I/O redirections
-    execvp(newArgv[0], newArgv);
+    execvp(argv[0], argv);
     perror("execvp"); // execvp only returns if there's an error
     exit(EXIT_FAILURE);
 }
