@@ -103,6 +103,19 @@ void buildArgs(char **argv, int *argc, const char *new) {
     *argc = *argc + 1;
 }
 
+void processRedirection(const char *redir, const char *fd) {
+    if (strcmp(redir, O_W) == 0)
+        redirectStream(fd, "w", stdout);
+    else if (strcmp(redir, O_A) == 0)
+        redirectStream(fd, "a", stdout);
+    else if (strcmp(redir, E_W) == 0)
+        redirectStream(fd, "w", stderr);
+    else if (strcmp(redir, E_A) == 0)
+        redirectStream(fd, "a", stderr);
+    else if (strcmp(redir, I_R) == 0)
+        redirectStream(fd, "r", stdin);
+}
+
 /**
  * consumeSpecialArgs()
  * Returns a new argument list without special arguments
@@ -122,24 +135,14 @@ char **consumeSpecialArgs(char **argv) {
         cmd = argv[i]; // the current arg
         fd = argv[i + 1]; // the next arg (file if cmd is redirection)
 
-        if (cmdIsRedirect(cmd))
+        if (cmdIsRedirect(cmd)) {
             i += 1; // don't add this command or the next to our new args list
-        else if (argv[i + 1] == NULL && isBackground(argv))
+            processRedirection(cmd, fd);
+        } else if (fd == NULL && isBackground(argv)) {
             continue; // if we're at the last arg and it's the background operator continue
-
-        // process redirection or add arg to list
-        if (strcmp(cmd, O_W) == 0)
-            redirectStream(fd, "w", stdout);
-        else if (strcmp(cmd, O_A) == 0)
-            redirectStream(fd, "a", stdout);
-        else if (strcmp(cmd, E_W) == 0)
-            redirectStream(fd, "w", stderr);
-        else if (strcmp(cmd, E_A) == 0)
-            redirectStream(fd, "a", stderr);
-        else if (strcmp(cmd, I_R) == 0)
-            redirectStream(fd, "r", stdin);
-        else
+        } else {
             buildArgs(args, &argc, cmd);
+        }
     }
     return args;
 }
