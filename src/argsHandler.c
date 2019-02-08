@@ -15,6 +15,8 @@ extern char **getln(); // function from parser.lex
 enum { NUM_ARGS = 100 }; // max arguments in list
 static const char *O_W = ">"; // write to stdout
 static const char *O_A = ">>"; // append to stdout
+static const char *E_W = "2>"; // write to stderr
+static const char *E_A = "2>>"; // append to stderr
 static const char *I_R = "<"; // redirect stdin
 static const char *BACK = "&"; // background process
 
@@ -68,7 +70,7 @@ bool isBackground(char **argv) {
  * Return true if the string is a file redirection operator
  */
 bool cmdIsRedirect(const char *cmd) {
-    const char *redirs[] = { O_W, O_A, I_R };
+    const char *redirs[] = { O_W, O_A, E_W, E_A, I_R };
     int len = sizeof(redirs) / sizeof(redirs[0]);
     for (int i = 0; i < len; i += 1)
         if (strcmp(cmd, redirs[i]) == 0)
@@ -130,6 +132,10 @@ char **consumeSpecialArgs(char **argv) {
             redirectStream(fd, "w", stdout);
         else if (strcmp(cmd, O_A) == 0)
             redirectStream(fd, "a", stdout);
+        else if (strcmp(cmd, E_W) == 0)
+            redirectStream(fd, "w", stderr);
+        else if (strcmp(cmd, E_A) == 0)
+            redirectStream(fd, "a", stderr);
         else if (strcmp(cmd, I_R) == 0)
             redirectStream(fd, "r", stdin);
         else
