@@ -17,6 +17,8 @@ static const char *O_W = ">"; // write to stdout
 static const char *O_A = ">>"; // append to stdout
 static const char *E_W = "2>"; // write to stderr
 static const char *E_A = "2>>"; // append to stderr
+static const char *C_O_W = "&>"; // write to stderr/stdout
+static const char *C_O_A = "&>>"; // append to stderr/stdout
 static const char *I_R = "<"; // redirect stdin
 static const char *BACK = "&"; // background process
 
@@ -70,7 +72,7 @@ bool isBackground(char **argv) {
  * Return true if the string is a file redirection operator
  */
 bool cmdIsRedirect(const char *cmd) {
-    const char *redirs[] = { O_W, O_A, E_W, E_A, I_R };
+    const char *redirs[] = { O_W, O_A, E_W, E_A, C_O_W, C_O_A, I_R };
     int len = sizeof(redirs) / sizeof(redirs[0]);
     for (int i = 0; i < len; i += 1)
         if (strcmp(cmd, redirs[i]) == 0)
@@ -103,16 +105,20 @@ void buildArgs(char **argv, int *argc, const char *new) {
     *argc = *argc + 1;
 }
 
+/**
+ * processRedirection()
+ * Close/open streams and assign them to the passed in file descriptor
+ */
 void processRedirection(const char *redir, const char *fd) {
-    if (strcmp(redir, O_W) == 0)
+    if (strcmp(redir, O_W) == 0 || strcmp(redir, C_O_W) == 0)
         redirectStream(fd, "w", stdout);
-    else if (strcmp(redir, O_A) == 0)
+    if (strcmp(redir, O_A) == 0 || strcmp(redir, C_O_A) == 0)
         redirectStream(fd, "a", stdout);
-    else if (strcmp(redir, E_W) == 0)
+    if (strcmp(redir, E_W) == 0 || strcmp(redir, C_O_W) == 0)
         redirectStream(fd, "w", stderr);
-    else if (strcmp(redir, E_A) == 0)
+    if (strcmp(redir, E_A) == 0 || strcmp(redir, C_O_A) == 0)
         redirectStream(fd, "a", stderr);
-    else if (strcmp(redir, I_R) == 0)
+    if (strcmp(redir, I_R) == 0)
         redirectStream(fd, "r", stdin);
 }
 
@@ -137,7 +143,7 @@ char **consumeSpecialArgs(char **argv) {
 
         if (cmdIsRedirect(cmd)) {
             i += 1; // don't add this command or the next to our new args list
-            processRedirection(cmd, fd);
+            processRedirection(cmd, fd); // redirect out/input appropriately
         } else if (fd == NULL && isBackground(argv)) {
             continue; // if we're at the last arg and it's the background operator continue
         } else {
