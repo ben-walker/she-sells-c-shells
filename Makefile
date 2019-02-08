@@ -31,4 +31,4 @@ $(LEX_C): $(LEX)
 	$(FLEX) $<
 
 clean:
-	$(RM) $(OBJ) $(EXE) $(LEX_C)
+	$(RM) $(OBJ) $(EXE) $(LEX_C) $(LEX_O)
